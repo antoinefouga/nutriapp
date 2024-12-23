@@ -57,48 +57,58 @@ export default function Home() {
   }, [value]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          {value
-            ? foods.find((food) => food.value === value)?.label
-            : "Select food..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search food..." />
-          <CommandList>
-            <CommandEmpty>No food found.</CommandEmpty>
-            <CommandGroup>
-              {foods.map((food) => (
-                <CommandItem
-                  key={food.value}
-                  value={food.value}
-                  onSelect={(currentValue: React.SetStateAction<string>) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === food.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {food.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <>
+      {!isLoading ? (
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="w-[200px] justify-between"
+            >
+              {value
+                ? foods.find((food) => food.value === value)?.label
+                : "Select food..."}
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0">
+            <Command>
+              <CommandInput placeholder="Search food..." />
+              <CommandList>
+                <CommandEmpty>No food found.</CommandEmpty>
+                <CommandGroup>
+                  {foods.map((food) => (
+                    <CommandItem
+                      key={food.value}
+                      value={food.value}
+                      onSelect={(
+                        currentValue: React.SetStateAction<string>
+                      ) => {
+                        setValue(currentValue === value ? "" : currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          value === food.value ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      {food.label}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+      ) : (
+        <div className="flex justify-center items-center h-screen text-white">
+          <p className="text-2x1">Loading...</p>
+        </div>
+      )}
+    </>
   );
 }
